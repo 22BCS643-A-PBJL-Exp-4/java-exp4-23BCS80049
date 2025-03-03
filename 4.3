@@ -1,0 +1,61 @@
+import java.util.*;
+
+class TicketBookingSystem {
+    private int vipSeats, regularSeats;
+    private int vipBooked = 0, regularBooked = 0;
+
+    public TicketBookingSystem(int vipSeats, int regularSeats) {
+        this.vipSeats = vipSeats;
+        this.regularSeats = regularSeats;
+    }
+
+    public synchronized void bookTicket(String name, String type) {
+        if (type.equalsIgnoreCase("VIP") && vipSeats > 0) {
+            vipSeats--;
+            vipBooked++;
+            System.out.println(name + " successfully booked a VIP ticket. Remaining VIP seats: " + vipSeats);
+        } else if (type.equalsIgnoreCase("Regular") && regularSeats > 0) {
+            regularSeats--;
+            regularBooked++;
+            System.out.println(name + " successfully booked a Regular ticket. Remaining Regular seats: " + regularSeats);
+        } else {
+            System.out.println(name + " failed to book a " + type + " ticket. No seats available.");
+        }
+    }
+
+    public void displaySummary() {
+        System.out.println("\nBooking Summary:");
+        System.out.println("Total VIP tickets booked: " + vipBooked);
+        System.out.println("Total Regular tickets booked: " + regularBooked);
+        System.out.println("Remaining VIP seats: " + vipSeats);
+        System.out.println("Remaining Regular seats: " + regularSeats);
+    }
+}
+
+public class TicketBooking {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter number of VIP seats: ");
+        int vipSeats = scanner.nextInt();
+        System.out.print("Enter number of Regular seats: ");
+        int regularSeats = scanner.nextInt();
+        scanner.nextLine();
+
+        TicketBookingSystem system = new TicketBookingSystem(vipSeats, regularSeats);
+
+        System.out.print("Enter number of customers: ");
+        int n = scanner.nextInt();
+        scanner.nextLine();
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter customer name: ");
+            String name = scanner.nextLine();
+            System.out.print("Enter ticket type (VIP/Regular): ");
+            String type = scanner.nextLine();
+            system.bookTicket(name, type);
+        }
+
+        system.displaySummary();
+        scanner.close();
+    }
+}
